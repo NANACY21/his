@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.personal.mapper.RegistLevelMapper" >
+    <resultMap id="BaseResultMap" type="com.personal.pojo.RegistLevel" >
+        <id column="ID" property="id" jdbcType="INTEGER" />
+        <result column="RegistCode" property="registcode" jdbcType="VARCHAR" />
+        <result column="RegistName" property="registname" jdbcType="VARCHAR" />
+        <result column="SequenceNo" property="sequenceno" jdbcType="INTEGER" />
+        <result column="RegistFee" property="registfee" jdbcType="DECIMAL" />
+        <result column="RegistQuota" property="registquota" jdbcType="INTEGER" />
+        <result column="DelMark" property="delmark" jdbcType="INTEGER" />
+    </resultMap>
+    <select id="selectAllRegistLevels" resultType="com.personal.pojo.RegistLevel">
+        select * from registlevel
+  	</select>
+    <sql id="Base_Column_List" >
+    ID, RegistCode, RegistName, SequenceNo, RegistFee, RegistQuota, DelMark
+  </sql>
+    <select id="queryLevels" resultMap="BaseResultMap">
+  	select id,RegistName from registlevel
+  </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from registlevel
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="Integer" >
+    delete from registlevel
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.neusoft.neuhis.pojo.Registlevel" >
+    insert into registlevel (ID, RegistCode, RegistName,
+      SequenceNo, RegistFee, RegistQuota,
+      DelMark)
+    values (#{id,jdbcType=INTEGER}, #{registcode,jdbcType=VARCHAR}, #{registname,jdbcType=VARCHAR},
+      #{sequenceno,jdbcType=INTEGER}, #{registfee,jdbcType=DECIMAL}, #{registquota,jdbcType=INTEGER},
+      #{delmark,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.neusoft.neuhis.pojo.Registlevel" >
+        insert into registlevel
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                ID,
+            </if>
+            <if test="registcode != null" >
+                RegistCode,
+            </if>
+            <if test="registname != null" >
+                RegistName,
+            </if>
+            <if test="sequenceno != null" >
+                SequenceNo,
+            </if>
+            <if test="registfee != null" >
+                RegistFee,
+            </if>
+            <if test="registquota != null" >
+                RegistQuota,
+            </if>
+            <if test="delmark != null" >
+                DelMark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="registcode != null" >
+                #{registcode,jdbcType=VARCHAR},
+            </if>
+            <if test="registname != null" >
+                #{registname,jdbcType=VARCHAR},
+            </if>
+            <if test="sequenceno != null" >
+                #{sequenceno,jdbcType=INTEGER},
+            </if>
+            <if test="registfee != null" >
+                #{registfee,jdbcType=DECIMAL},
+            </if>
+            <if test="registquota != null" >
+                #{registquota,jdbcType=INTEGER},
+            </if>
+            <if test="delmark != null" >
+                #{delmark,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.neusoft.neuhis.pojo.Registlevel" >
+        update registlevel
+        <set >
+            <if test="registcode != null" >
+                RegistCode = #{registcode,jdbcType=VARCHAR},
+            </if>
+            <if test="registname != null" >
+                RegistName = #{registname,jdbcType=VARCHAR},
+            </if>
+            <if test="sequenceno != null" >
+                SequenceNo = #{sequenceno,jdbcType=INTEGER},
+            </if>
+            <if test="registfee != null" >
+                RegistFee = #{registfee,jdbcType=DECIMAL},
+            </if>
+            <if test="registquota != null" >
+                RegistQuota = #{registquota,jdbcType=INTEGER},
+            </if>
+            <if test="delmark != null" >
+                DelMark = #{delmark,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.neusoft.neuhis.pojo.Registlevel" >
+    update registlevel
+    set RegistCode = #{registcode,jdbcType=VARCHAR},
+      RegistName = #{registname,jdbcType=VARCHAR},
+      SequenceNo = #{sequenceno,jdbcType=INTEGER},
+      RegistFee = #{registfee,jdbcType=DECIMAL},
+      RegistQuota = #{registquota,jdbcType=INTEGER},
+      DelMark = #{delmark,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

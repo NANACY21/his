@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+ 	<script type="text/javascript">
+		$(function(){
+			$.ajax({
+				type:"get",
+				url:"department/list.action",
+				success:function(resp){
+					var html="";
+					$.each(resp,function(k,v){
+						
+						html +='<tr><td><input type="checkbox" /></td><td>'+v.deptcode+'</td><td>'+v.deptname+'</td><td>'+v.constantitem.constantname+'</td><td>'+kslb(v.depttype)+"</td><td><a href='javascript:void(0)' onclick='deluser(this,"+v.id+")'>delete</a>&nbsp;<a href='javascript:void(0);' onclick='deptedit("+v.id+")'>edit</a></td></tr>";
+						//alert(v.id+"-"+v.deptcode+"-"+v.deptname+"-"+v.depttype+"-"+v.constantitem.constantname);
+					});
+					$('#deptlist').append(html);
+				},
+				error:function(){
+					alert("失败");
+				}
+			});
+		});
+		function kslb(no) {
+			if(no==1){
+				return"临床";
+			}
+			if(no==2){
+				return"医技";
+			}
+			if(no==3){
+				return"财务";
+			}
+			if(no==4){
+				return"行政";
+			}
+		}
+		function deluser(t,id){
+			
+			var $this = $(t);
+			 $.ajax({
+				type:"get",
+				url:"department/del.action?id="+id,
+				success:function(resp){
+					if("success"==resp){
+						alert("成功");
+						$this.parentsUntil('tbody').remove();
+					}else{
+						alert("删除失败");
+					}
+				},
+				error:function(){
+					alert("失败");
+				}
+			});
+		}
+			$(function () {
+				$('#add').click(function () {
+					window.open("addDept.html");
+				})
+			})
+			function deptedit(id) {
+				window.open("editdept.html?id="+id);
+			}
+			
+			$(function(){
+				if(sessionStorage.getItem("id")!=null){
+				$('#uname').html(sessionStorage.getItem("username"));
+				}else{
+					alert("请先登录");
+					location.href="login.html";
+					}
+			});
+			
+			
+			
+			function logout(){
+				$.ajax({
+					type:"post",
+					url:"user/logout.action",
+					success:function(resp){
+						if("success"==resp){
+							sessionStorage.clear();
+							alert("退出登录");
+							location.href="login.html";
+						}else{
+							alert("失败");
+						}
+					},
+					error:function(){
+						alert("失败");
+					}
+				});
+			}
+			
+		</script>
+		<style type="text/css">
+			#title{
+				width: 100%;
+				height:40px;
+				background-color: deepskyblue;
+			}
+			#deptlist{
+				width: 100%;
+				background-color: aquamarine;
+				font-family: arial ;
+				font-size: 25px;
+				border: skyblue 1px;
+			}
+			#sel{
+				width: 100%;
+				height:40px;
+				background-color: royalblue;
+			}
+			#select{
+				height: 20px;
+				margin-top: 7px;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+	<div id="title"><font style="color: beige;" size="6">东软云医院HIS系统</font> <div style="float: right; "><span id="uname" ></span>&nbsp;<a href="javascript:void(0)" onclick="logout()">注销</a></div> </div>
+		<center>
+			<div id="sel"><input type="text" id="select"> <input type="button" value="查询" style=" height: 24px; width:70px  ;"><input type="button" style="background-color: deepskyblue; height: 24px; width:70px  ;" value="新增" onclick ="add()" id="add"></div>
+			<table  id="deptlist">
+				<tr id="listtitle">
+					<td><input type="checkbox" /></td>
+					<td>科室编号</td>
+					<td>科室名称</td>
+					<td>科室分类</td>
+					<td>科室类别</td>
+					<td>操作</td>
+				</tr>
+			</table>
+
+		</center>
+	</body>
+
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="js/blsy.js"></script>
+<link rel="stylesheet" href="css/blsy.css">
+<link rel="stylesheet" href="css/table1.css">
+</head>
+<body>
+		<div id="aa">
+			<h1 style="color: white; margin-left: 20px; padding-top:5px ;">东软云医院HIS系统</h1>
+		<div  class="cc">
+			<font id="uname" style="color:white"></font>
+			<a href="javascript:void(0)" onclick="logout()" style="color:red">注销</a>
+		</div>
+		<div id="dd">
+			<div id="lp">
+				<font color="#1E90FF">
+					患者名称：
+					<input type="" name="" placeholder="请输入患者名称"/>
+					<input type="button" value="查询" id="na"/>
+				</font>
+			</div>
+			<a href="javascript:void(0)" class="chao" id="self">本人</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="javascript:void(0)" class="chao" id="others">科室</a>
+			<hr />
+			
+			<div id="bn">
+				<div class="kk">
+					<font color="#1E90FF">未诊患者</font>
+				</div>
+				<table class="imagetable" id="wei1">
+				</table>
+					<br />
+				<div class="kk">
+					<font color="#1E90FF">已诊患者</font>
+				</div>
+				<table class="imagetable"  id="yi1">
+				</table>
+			</div>
+			
+			<div id="cn" style="display:none;">
+				<div class="kk">
+					<font color="#1E90FF">未诊患者</font>
+				</div>
+				<table class="imagetable" id="wei2">
+				</table>
+					<br />
+				<div class="kk">
+					<font color="#1E90FF">已诊患者</font>
+				</div>
+				<table class="imagetable" id="yi2">
+				</table>
+			</div>
+		
+		</div>
+		<div id="ff">
+			<div id="gg">
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="">暂存</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:void(0)" id="jiao">提交</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:void(0)" id="kong">清空</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:void(0)" id="refresh">刷新</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:void(0)" id="finish">诊毕</a>
+				<span id="mn">
+					<font id="ty">
+						
+					</font>
+				</span>
+			</div>
+			<table>
+				<tr>
+					<td>
+						主诉<input type="text" name="zs" class="bg"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						现病史<input type="text" name="xbs" class="bg"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						现病治疗情况<input type="text" name="zlqk" class="bg"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						既往史<input type="text" name="jws" class="bg"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						过敏史<input type="text" name="gms" class="bg"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						体格检查<input type="text" name="tgjc" class="bg"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						检查建议<input type="text" name="jcjy" class="bg"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						注意事项<input type="text" name="zysx" class="bg"/>
+					</td>
+				</tr>
+			</table>
+			
+		</div>
+		
+</div>
+</body>
+</html>

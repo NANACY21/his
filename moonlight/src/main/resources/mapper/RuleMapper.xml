@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.personal.mapper.RuleMapper" >
+    <resultMap id="BaseResultMap" type="com.neusoft.his.pojo.Rule" >
+        <id column="ID" property="id" jdbcType="INTEGER" />
+        <result column="RuleName" property="rulename" jdbcType="VARCHAR" />
+        <result column="DeptID" property="deptid" jdbcType="INTEGER" />
+        <result column="UserID" property="userid" jdbcType="INTEGER" />
+        <result column="Week" property="week" jdbcType="VARCHAR" />
+        <result column="DelMark" property="delmark" jdbcType="INTEGER" />
+
+        <association property="department" javaType="Department">
+            <id column="did" property="id" jdbcType="INTEGER" />
+            <result column="DeptCode" property="deptcode" jdbcType="VARCHAR" />
+            <result column="DeptName" property="deptname" jdbcType="VARCHAR" />
+        </association>
+        <association property="user" javaType="User">
+            <id column="uid" property="id" jdbcType="INTEGER" />
+            <result column="UserName" property="username" jdbcType="VARCHAR" />
+        </association>
+    </resultMap>
+
+
+    <insert id="insertRule" parameterType="Rule">
+ 		insert into rule(rulename,deptid,userid,week) values(#{rulename},#{department.id},#{user.id},#{week})
+ 	</insert>
+    <insert id="insert" parameterType="rule">
+ 	insert into rule (RuleName,DeptID,UserID,Week) values (#{rulename},#{deptid},#{userid},#{week})
+    </insert>
+</mapper>

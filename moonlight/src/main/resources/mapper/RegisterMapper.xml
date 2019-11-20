@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.neusoft.neuhis.mapper.RegisterMapper" >
+  <resultMap id="BaseResultMap" type="com.neusoft.neuhis.pojo.Register" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="CaseNumber" property="casenumber" jdbcType="VARCHAR" />
+    <result column="RealName" property="realname" jdbcType="VARCHAR" />
+    <result column="Gender" property="gender" jdbcType="INTEGER" />
+    <result column="IDnumber" property="idnumber" jdbcType="VARCHAR" />
+    <result column="BirthDate" property="birthdate" jdbcType="DATE" />
+    <result column="Age" property="age" jdbcType="INTEGER" />
+    <result column="AgeType" property="agetype" jdbcType="CHAR" />
+    <result column="HomeAddress" property="homeaddress" jdbcType="VARCHAR" />
+    <result column="VisitDate" property="visitdate" jdbcType="DATE" />
+    <result column="Noon" property="noon" jdbcType="CHAR" />
+   <!--  <result column="DeptID" property="deptid" jdbcType="INTEGER" /> -->
+    <result column="UserID" property="userid" jdbcType="INTEGER" />
+    <!-- <result column="RegistLeID" property="registleid" jdbcType="INTEGER" /> -->
+    <result column="SettleID" property="settleid" jdbcType="INTEGER" />
+    <result column="IsBook" property="isbook" jdbcType="CHAR" />
+    <result column="RegistTime" property="registtime" jdbcType="TIMESTAMP" />
+    <result column="RegisterID" property="registerid" jdbcType="INTEGER" />
+    <result column="VisitState" property="visitstate" jdbcType="INTEGER" />
+    <association property="dept" javaType="com.neusoft.neuhis.pojo.Department">
+    	<id column="deptid" property="id"/>
+    </association>
+    <association property="registLevel" javaType="com.neusoft.neuhis.pojo.Registlevel">
+    	<id column="rid" property="id"/>
+    </association>
+  <association property="constantitem" javaType="Constantitem">
+      <id column="cid" property="id" jdbcType="INTEGER" />
+      <result column="ConstantName" property="constantname" jdbcType="VARCHAR" />
+  </association>
+  </resultMap>
+
+    <resultMap type="com.neusoft.neuhis.pojo.User" id="UserResultMap">
+        <id column="ID" property="id" jdbcType="INTEGER" />
+        <result column="RealName" property="realname" jdbcType="VARCHAR" />
+    </resultMap>
+ <select id="getDoctors" resultMap="BaseResultMap" parameterType="com.neusoft.neuhis.pojo.Register" >
+    select  u.id,u.realname
+    from scheduling s join user u on s.userid=u.id 
+    where scheddate=#{visitdate} and noon=#{noon} and u.deptid=#{dept.id} and u.registleid=#{registLevel.id}
+  </select> 
+ <select id="getRegisterById" resultMap="BaseResultMap" parameterType="String" >
+    select  casenumber,realname,gender,age
+    from Register 
+    where casenumber = #{casenumber}
+  </select> 
+ <select id="getRegister" resultMap="BaseResultMap" parameterType="com.neusoft.neuhis.pojo.Register" >
+    select  casenumber,realname,age
+    from Register 
+    where userid=#{userid} and visitstate=#{visitstate}
+  </select>
+
+
+    <select id="selectUserIds" parameterType="Register" resultMap="UserResultMap">
+  	select u.ID,u.RealName
+	from user u join scheduling s on u.id=s.userid
+	where s.SchedDate=#{visitdate} and
+	s.noon=#{noon} and
+	s.DeptID=#{dept.id} and
+	u.RegistLeID=#{reglevel.id}
+  </select>
+
+    <select id="selectCaseNum" resultType="int">
+  	select max(casenumber)+1 from register
+  </select>
+
+    <select id="selectRealName" parameterType="register" resultMap="BaseResultMap">
+  	select id,CaseNumber,RealName,Age
+	from register
+	where UserID=#{userid} and VisitState=#{visitstate}
+  </select>
+
+    <select id="selectOne" parameterType="register" resultMap="BaseResultMap">
+  	select r.CaseNumber,r.RealName,r.Age,c.ConstantName
+	from register r join constantitem c on r.Gender=c.id
+	where CaseNumber=#{casenumber}
+  </select>
+
+    <update id="updateVisitState" parameterType="register">
+  	update register set VisitState=#{visitstate} where id=#{id}
+  </update>
+
+    <insert id="insertRegister" parameterType="Register" >
+    insert into register ( CaseNumber, RealName,
+      Gender, IDnumber, BirthDate,
+      Age, AgeType, HomeAddress,
+      VisitDate, Noon, DeptID,
+      UserID, RegistLeID, SettleID)
+    values (
+     #{casenumber,jdbcType=VARCHAR},
+      #{realname,jdbcType=VARCHAR},
+      #{gender,jdbcType=INTEGER},
+      #{idnumber,jdbcType=VARCHAR},
+      #{birthdate,jdbcType=DATE},
+      #{age,jdbcType=INTEGER},
+      #{agetype,jdbcType=CHAR},
+      #{homeaddress,jdbcType=VARCHAR},
+      #{visitdate,jdbcType=DATE},
+      #{noon,jdbcType=CHAR},
+      #{dept.id,jdbcType=INTEGER},
+      #{userid,jdbcType=INTEGER},
+      #{reglevel.id,jdbcType=INTEGER},
+      #{settleid,jdbcType=INTEGER})
+  </insert>
+</mapper>

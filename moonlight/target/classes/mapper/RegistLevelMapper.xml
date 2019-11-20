@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.personal.mapper.RegistLevelMapper" >
+    <resultMap id="BaseResultMap" type="com.personal.pojo.RegistLevel" >
+        <id column="ID" property="id" jdbcType="INTEGER" />
+        <result column="RegistCode" property="registcode" jdbcType="VARCHAR" />
+        <result column="RegistName" property="registname" jdbcType="VARCHAR" />
+        <result column="SequenceNo" property="sequenceno" jdbcType="INTEGER" />
+        <result column="RegistFee" property="registfee" jdbcType="DECIMAL" />
+        <result column="RegistQuota" property="registquota" jdbcType="INTEGER" />
+        <result column="DelMark" property="delmark" jdbcType="INTEGER" />
+    </resultMap>
+    <select id="selectAllRegistLevels" resultType="com.personal.pojo.RegistLevel">
+        select * from registlevel
+  	</select>
+</mapper>

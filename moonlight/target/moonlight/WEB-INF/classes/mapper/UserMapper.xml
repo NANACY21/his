@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.personal.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.personal.pojo.User" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="UserName" property="username" jdbcType="VARCHAR" />
+    <result column="Password" property="password" jdbcType="VARCHAR" />
+    <result column="RealName" property="realname" jdbcType="VARCHAR" />
+    <result column="UseType" property="usetype" jdbcType="INTEGER" />
+    
+    <result column="IsScheduling" property="isscheduling" jdbcType="CHAR" />
+    
+   
+    <result column="DelMark" property="delmark" jdbcType="INTEGER" />
+    <association property="constantItem" javaType="ConstantItem">
+    	<id column="cid" property="id" jdbcType="INTEGER" />
+    	<result column="ConstantName" property="constantname" jdbcType="VARCHAR" />
+    </association>
+    <association property="department" javaType="Department">
+    	 <id column="did" property="id" jdbcType="INTEGER" />
+	    <result column="DeptName" property="deptname" jdbcType="VARCHAR" />
+    </association>
+    <association property="registLevel" javaType="RegistLevel">
+    	 <id column="rid" property="id" jdbcType="INTEGER" />
+  		 <result column="RegistName" property="registname" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+ <sql id="usercondition">
+ 	u.DeptID = d.ID and u.RegistLeID = r.ID and  u.usetype= 3  and u.DelMark=1 and r.DelMark=1 and d.DelMark=1  
+ </sql>
+ <select id="selectUsersByDeptAndRegistLevel" parameterType="User" resultMap="BaseResultMap">
+ 	select u.id, u.UserName,d.id did ,u.DeptID,u.REgistLeID from `user`  u ,department d,registlevel r
+	<where>  
+  	<include refid="usercondition"></include>
+	<if test="department!=null and department.id!=null">
+		and u.DeptID = #{department.id}
+	</if>
+	<if test="registLevel!=null and registLevel.id!=null">
+		and u.RegistLeID =  #{registLevel.id}
+	</if>
+</where>
+ </select>
+ 	
+</mapper>

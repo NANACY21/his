@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				if(sessionStorage.getItem("username")!=null){
+				$('#uname').html(sessionStorage.getItem("username"));
+				}else{
+					alert("请先登录");
+					location.href="login.html";
+					}
+			});
+			
+			
+			
+			function logout(){
+				$.ajax({
+					type:"post",
+					url:"user/logout.action",
+					success:function(resp){
+						if("success"==resp){
+							sessionStorage.clear();
+							alert("退出登录");
+							location.href="login.html";
+						}else{
+							alert("失败");
+						}
+					},
+					error:function(){
+						alert("失败");
+					}
+				});
+			}
+			
+			
+			
+			</script>
+</head>
+<body>
+<div style="width: 100px;margin-left: 90%"><span id="uname"></span>&nbsp;<a href="javascript:void(0)" onclick="logout()">注销</a></div>
+</body>
+</html>

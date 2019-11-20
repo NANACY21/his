@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link type="text/css" rel="stylesheet" href="../css/department.css" />
+		<script src="../js/jquery-3.2.1.min.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="../js/pagination/common/common.css" media="screen">
+		<link rel="stylesheet" type="text/css" href="../js/pagination/common/highlight.min.css" media="screen">
+		<link rel="stylesheet" type="text/css" href="../js/pagination/pagination.css" media="screen">
+		<script type="text/javascript" src="../js/pagination/jquery.pagination.js"></script>
+
+	</head>
+
+	<body>
+		<div class="content">
+
+		</div>
+
+		<table class="listdepts">
+			<tbody id="deptlist">
+
+			</tbody>
+
+		</table>
+		<div class="setPageDiv">
+			<div class="m-style M-box" id="pagination" style="text-align: center; margin-left: 30%;"></div>
+		</div>
+		<script type="text/javascript">
+			var pageSize = 10; //设置每页显示条数
+			var total; //数据总条数
+			function PageCallback(index, jq) { //前一个表示您当前点击的那个分页的页数索引值，后一个参数表示装载容器。 
+
+				LoadData(index);
+			}
+
+			function pagination() {
+
+				$("#pagination").pagination({
+					callback: function(index, jq) {
+						LoadData(index.getCurrent() - 1);
+					},
+					pageCount: Math.ceil(total / 10),
+					jump: true,
+					//coping: true,
+					homePage: '首页',
+					endPage: '末页',
+					prevContent: '上页',
+					nextContent: '下页',
+					//两侧显示的首尾分页的条目数
+				});
+			}
+
+			function LoadData(pageIndex) {
+				$.ajax({
+					type: "get",
+					url: "http://localhost:8080/his/department/getallpages.action?page=" + pageIndex + "&pageSize=" + pageSize,
+					async: false,
+					dataType: "json",
+					success: function(resp) {
+						total = resp.count;
+						var lst = resp.contents;
+						var html = '<tr><td><input type="checkbox" name="checkall" id="checkall"></td><td>科室编码</td><td>科室名称</td><td>科室分类</td><td>科室类别</td><td>操作</td></tr>';
+						$.each(lst, function(k, v) {
+							html += '<tr><td><input type="checkbox" name="id" value="' + v.id + '"></td>';
+							html += '<td>' + v.deptcode + '</td><td>' + v.deptname + '</td><td>' + v.constantItem.constantname + '</td><td>' + v.depttype + '</td>';
+							html += '<td>编辑&nbsp;删除</td></tr>';
+						});
+						$('#deptlist').html(html);
+					}
+				});
+			}
+
+			$(function() {
+				LoadData(0);
+				pagination();
+			});
+		</script>
+	</body>
+
+</html>

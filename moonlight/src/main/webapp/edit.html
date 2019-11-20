@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="js/edit.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+	
+		$(function() {
+			var url = location.href;
+			var id = url.split('id=')[1];
+			
+			$.ajax({
+				type : "get",
+				url : "department/seldeptid.action",
+				success : function(resp) {
+					$.each(resp, function(k, v) {
+						var html = "";
+						html += "<option value='"+v.deptcategoryid+"'>"
+								+ v.constantitem.constantname + "</option>";
+						$('#dd').append(html);
+					})
+				},
+				error : function() {
+					alert("加载数据失败")
+				}
+			});
+
+			
+			$.ajax({
+				type : "get",
+				url : "department/selone.action?id=" + id,
+				success : function(resp) {
+					$('#num').val(resp.deptcode);
+					$('#name').val(resp.deptname);
+					$('#dd').val(resp.deptcategoryid);
+					$('#ee').val(resp.depttype);
+				},
+				error : function() {
+					alert("数据加载失败");
+				}
+			});
+			
+		
+			$('#save2').click(function(){
+				var code = $('#num').val();
+				var name = $('#name').val();
+				var kinds = $('#dd').val();
+				var type = $('#ee').val();
+				//alert(code+"::"+deptname+"::"+kinds+"::"+type);
+				$.ajax({
+					type:"post",
+					url:"department/update.action",
+					//contentType:"application/json",
+					//data:'{"deptcode":'+code+',"deptname":"'+name+'","deptcategoryid":"'+kinds+'","depttype":"'+type+'"}',
+					data:"deptcode="+code+"&deptname="+name+"&deptcategoryid="+kinds+"&depttype="+type+"&id="+id,
+					success:function(resp){
+						alert("修改成功！");
+						var par = window.opener;
+						par.location.reload();
+						window.close();
+					},
+					error:function(){
+						alert("加载数据失败");
+					}
+					
+				});
+				
+			});
+		
+		
+		});
+		
+		
+	</script>
+
+
+	科室编码：
+	<input id="num" type="text" name="ksbm" value="" />
+	<br /> 科室名称：
+	<input id="name" type="text" name="ksmc" value="" />
+	<br /> 科室分类：
+	<select id="dd"></select>
+	<br /> 科室类别：
+	<select id="ee">
+		<option value="1">临床</option>
+		<option value="2">医技</option>
+		<option value="3">财务</option>
+		<option value="4">行政</option>
+		<option value="5">其它</option>
+	</select>
+	<br />
+	<br />
+	<input type="button" value="保存" id="save2"/>
+</body>
+</html>
+

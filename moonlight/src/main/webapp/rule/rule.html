@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style type="text/css">
+		table {
+			border-right: 1px solid;
+			border-bottom: 1px solid
+		}
+
+		td {
+			border-left:1px solid;border-top:1px solid
+		}
+	</style>
+	<script src="../js/jquery-3.2.1.min.js"></script>
+	<script src="../js/rule/rule.js"></script>
+</head>
+
+<body>
+<div style="text-align: center;">
+	<select name="deparment.id" id="dept">
+		<option></option>
+
+	</select>
+	<select name="registlevel.id" id="level">
+		<option></option>
+
+	</select>
+	<span><input type="button" id="search" value="查询"/></span>
+</div>
+
+<div style="text-align: center;">
+	<table style="border: 1px solid;">
+		<thead>
+		<tr>
+			<td><input type="checkbox" name="cks" /></td>
+			<td>医生名称</td>
+			<td>星期一上午</td>
+			<td>星期一下午</td>
+			<td>星期二上午</td>
+			<td>星期二下午</td>
+			<td>星期三上午</td>
+			<td>星期三下午</td>
+			<td>星期四上午</td>
+			<td>星期四下午</td>
+			<td>星期五上午</td>
+			<td>星期五下午</td>
+			<td>星期六上午</td>
+			<td>星期六下午</td>
+			<td>星期日上午</td>
+			<td>星期日下午</td>
+		</tr>
+		</thead>
+		<tbody>
+
+		</tbody>
+	</table>
+
+</div>
+<div style="text-align: center;">
+	<input type="hidden" name="department.id" value="" />
+	规则名称:<input type="text" name="rulename" />
+	<input type="button" id="addrule" value="添加规则"/></div>
+</body>
+
+</html>

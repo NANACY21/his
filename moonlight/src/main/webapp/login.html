@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>HIS系统登录界面</title>
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/login.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				$('#login').click(function(){
+					var uname = $('#uname').val();
+					var psw = $('#psw').val();
+					var type = $('#v').val();
+					//alert(uname+psw+type);
+					$.ajax({
+						url:"user/login.action",
+						type:"post",
+						data:"username="+uname+"&password="+psw+"&usetype="+type,
+						success:function(resp){
+							if(""==resp){
+								alert("用户名或密码错误");
+							}else if($('#v').val()==3){
+								sessionStorage.setItem("username",resp.username);
+								sessionStorage.setItem("id",resp.id);
+								location.href="mzbl.html";
+							}else if($('#v').val()==1){
+								sessionStorage.setItem("username",resp.username);
+								sessionStorage.setItem("id",resp.id);
+								location.href="department.html";
+							}else if($('#v').val()==2){
+								sessionStorage.setItem("username",resp.username);
+								sessionStorage.setItem("id",resp.id);
+								location.href="Regist.html";
+							}
+							
+							else{
+								alert("登录成功");
+								sessionStorage.setItem("username",resp.username);
+								location.href="gh.html";
+							}
+						},
+						error:function(){
+							alert("登录失败");
+						}
+					});
+				});
+			});
+		</script>
+		<style>
+			#body{
+				border: solid aqua;
+				width: 20%;
+				height: 220px;
+				margin-top: 240px;
+				background-color: #00BFFF;
+			}
+			#table{
+				margin-top: 30px;				
+			}
+
+			#all{
+				border: solid 1px;
+				width: 500px;
+				height: 500px;
+				margin-left: 550px;
+			}
+			.logC a button {
+				width: 100px;
+				height: 41px;
+				font-size: 18px;
+				margin-top: 30px;
+				margin-bottom: 0px;
+				margin-left: 150px;
+			}
+			#all input{
+				width: 300px;
+				height: 40px;
+				margin-top: 10px;
+				margin-bottom: 0px;
+				margin-left: 25px;
+			}
+			#koko{
+				color: #EE7700;
+				margin-top: 10px;
+				margin-bottom: 0px;
+				margin-left: 25px;
+			}
+			#xiala{
+				width: 12%;
+				height: 35px;
+				margin-top: 10px;
+				margin-bottom: 0px;
+				margin-left: 25px;
+				width: 150px;
+			}
+		</style>
+	</head>
+	<body>
+	<center>
+		<div id="body">
+			<div id="title">
+				<h1>用友云HIS登录</h1>
+			</div>
+			<table  id="table">
+				<tr>
+					<td>用户名</td><td><input type="text" name="uname" id="uname"></td>
+				</tr>
+				<tr>
+					<td>密码</td>
+					<td><input type="password" name="password" id="psw"></td>
+				</tr>
+				<tr>
+					<td>类型</td><td><select style="width: 170px;" id="v">
+						<option value="2" >挂号管理员</option>
+						<option value="3" >门诊医生</option>
+						<option value="1" >医院管理员</option>
+						<option value="0" >系统管理员</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td></td><td><input type="button"  name="login" id="login" value="登录" style=" width: 170px; background-color:azure"></td>
+				</tr>
+			</table>
+		</div>
+	</center>
+
+	<div id="all">
+		<h1 id="koko">登录</h1>
+		<input type="text"
+			   placeholder="输入用户名"  name="username"/>
+		<input type="password"
+			   placeholder="输入用户密码" name="psw"/>
+		<br />
+		<select id="xiala">
+			<option value="1">管理员</option>
+			<option value="2">挂号收费员</option>
+			<option value="3">门诊医生</option>
+		</select>
+		<div class="logC">
+			<input type="button" name="log" value="登录"/>
+		</div>
+	</div>
+	</body>
+</html>

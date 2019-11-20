@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+		<script type="text/javascript">
+		$(function(){
+			//获得到未诊患者名单
+			$.ajax({
+				type:"post",
+				data:"userid="+sessionStorage.getItem("id")+"&visitstate="+2,
+				url:"record/listregist.action",
+				success:function(resp){
+					var html="";
+					$.each(resp,function(k,v){
+						
+						html +='<tr><td>'+v.casenumber+'</td><td>'+v.realname+'</td><td>'+v.age+'</td></tr>';
+						
+					});
+					$('#Register').append(html);
+				},
+				error:function(){
+					alert("失败");
+				}
+			});
+			//获取一就诊列表
+			 $.ajax({
+				type:"post",
+				data: "userid="+sessionStorage.getItem("id")+"&visitstate="+3,
+				url:"record/listregist.action",
+				success:function(resp){
+					var html="";
+					$.each(resp,function(k,v){
+						
+						html +='<tr><td><a a href="javascript:void(0)" onclick="Selregister('+v.casenumber+')">'+v.casenumber+'</a></td><td>'+v.realname+'</td><td>'+v.age+'</td></tr>';
+						
+					});
+					$('#Register1').append(html);
+				},
+				error:function(){
+					alert("失败");
+				}
+			}); 
+			//获取诊室未诊列表
+			 $.ajax({
+				type:"post",
+				data: "userid="+sessionStorage.getItem("id")+"&visitstate="+3,
+				url:"record/listregist.action",
+				success:function(resp){
+					var html="";
+					$.each(resp,function(k,v){
+						
+						html +='<tr><td><a a href="javascript:void(0)" onclick="Selregister('+v.casenumber+')">'+v.casenumber+'</a></td><td>'+v.realname+'</td><td>'+v.age+'</td></tr>';
+						
+					});
+					$('#Register3').append(html);
+				},
+				error:function(){
+					alert("失败");
+				}
+			}); 
+			 $('#keshi').click(function(){
+					$('#hzlist').hide();
+					$('#hzlist1').show();
+				});
+			 $('#benren').click(function(){
+					$('#hzlist').show();
+					$('#hzlist1').hide();
+				});
+		});
+		
+	function Selregister(casenumber){
+			 $.ajax({
+				type:"post",
+				url:"record/getRegister.action?casenumber="+casenumber,
+				success:function(resp){
+					var html='<fond>姓名:'+resp.realname+'&nbsp&nbsp</fond><fond>年龄：'+resp.age+'&nbsp&nbsp</fond><fond>病历号：'+resp.casenumber+'&nbsp&nbsp</fond><fond>性别：'+sex(resp.gender)+'</fond>';
+					$('#RegOne').html(html);
+				},
+				error:function(){
+					alert("失败");
+				}
+			});
+		}
+	function sex(no) {
+		if(no==71){
+			return"男";
+		}
+		if(no==72){
+			return"女";
+		}
+		
+	}
+	$(function(){
+		if(sessionStorage.getItem("id")!=null){
+		$('#uname').html(sessionStorage.getItem("username"));
+		}else{
+			alert("请先登录");
+			location.href="login.html";
+			}
+	});
+	
+	
+	
+	function logout(){
+		$.ajax({
+			type:"post",
+			url:"user/logout.action",
+			success:function(resp){
+				if("success"==resp){
+					sessionStorage.clear();
+					alert("退出登录");
+					location.href="login.html";
+				}else{
+					alert("失败");
+				}
+			},
+			error:function(){
+				alert("失败");
+			}
+		});
+	}
+	
+		</script>
+		<style>
+			#title{
+				width: 100%;
+				height:40px;
+				background-color: deepskyblue;
+			}
+			#list{
+				width: 15%;
+				height: 710px;
+				border: solid gainsboro;
+				float: left;
+			}
+			li{
+				margin-top: 15px;
+			}
+			#main{
+				width: 84%;
+				height: 710px;
+				border: solid gainsboro;
+				float: left;
+			}
+			#maintitle{
+				height: 8%;
+				border: solid gainsboro;
+			}
+			#mzbl{
+				background-color: whitesmoke;
+				height: 36px;
+				width: 90px;
+				margin-top: 18px;
+				margin-left: 18px;
+				margin-bottom: 0px;
+				border: solid gainsboro;
+				border-bottom: hidden;
+			}
+			#mainleft{
+				width: 28%;
+				height: 642px;
+				border: solid gainsboro;
+				float: left;
+			}
+			#mainrigettitle{
+				margin-top: 16px;
+				border: solid gainsboro;
+				height: 40px;
+			}
+			#mainright{
+				float: left;
+			}
+			#caozuo{
+				border: solid ghostwhite;
+				background-color:gainsboro;
+				width:920px ;
+				height: 40px;
+			 margin-left:12px ;
+			}
+			.inputtext{
+				
+				 width:800px ;
+				 height:40px ;
+			}
+		</style>
+		
+	</head>
+	<body>
+<div id="title"><font style="color: beige;" size="6">东软云医院HIS系统</font> <div style="float: right; "><span id="uname" ></span>&nbsp;<a href="javascript:void(0)" onclick="logout()">注销</a></div> </div>
+		<div id="list">
+			<h3 >门诊医生</h3>
+			<ul style="margin-top: 20px;">
+				<li>门诊病历 </li>
+				<li>医技模板管理</li>
+				<li>西药处方模板 </li>
+				<li>中药处方模板*</li>
+			</ul>
+		</div>
+		<div id="main">
+			<div id="maintitle">
+				<div id="mzbl"><a style="margin-top: 10px;"><h3 style="color: dodgerblue; margin-top: 8px; margin-left:3px ;">门诊病例</h3> </div>
+				</a>
+			</div>
+			<div id="mainleft">
+				<div style="border: solid ghostwhite; height: 40px;"><center><h3 style="color: #00BFFF;">患者选择</h3></center></div>
+				<div style="background-color: gainsboro; border: solid ghostwhite;"><font>患者名：</font> <input type="text" placeholder="请输入内容" />  <input type="button" value="查询" /> </div>
+				<div style="background-color: gainsboro; margin-top:20px ;"> <input type="button" value="本人"  id="benren"/> <input type="button" value="科室"  id="keshi"/> </div>
+				<div id="hzlist">
+					<table >
+						<tr >
+							<td><font color="dodgerblue">未诊患者:</font></td>
+						</tr>
+						<tr id="Register"></tr>
+						<tr>
+							<td><font color="dodgerblue">已诊患者:</font></td>
+							<tr id="Register1"></tr>
+						</tr>
+					</table>
+				</div>
+				<div id="hzlist1"  style="display: none;">
+					<table >
+						<tr >
+							<td><font color="dodgerblue">未诊患者:</font></td>
+						</tr>
+						<tr id="Register2"></tr>
+						<tr>
+							<td><font color="dodgerblue">已诊患者:</font></td>
+							<tr id="Register3"></tr>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div id="mainright">
+				<div style="margin-top: 14px;"> <input type="button" value="隐藏患者栏" style="background-color: #00BFFF;" /> <font>请选择患者</font id="hanzhe"> <span id="RegOne"></span></div>
+				<div id="mainrigettitle" style="width: 920px; margin-left:12px ;"> <div style="margin-top:10px; background-color: #00BFFF; margin-bottom: 0px;  width:80px ;height: 30px;"> <a>病历首页</a></div>   </div>
+				<div id="caozuo"><div style="margin-top: 10px;"><input type="button"  value="暂存"  style="background-color: white; margin-left: 200px;"/> <input type="button"  value="提交"  style="background-color: white; margin-left: 80px;" /> <input type="button"  value="清空所有" style="background-color: white; margin-left: 80px;"/> <input type="button"  value="刷新" style="background-color: white; margin-left: 80px;" /> </div> </div>
+				<div style="margin-left: 14px;"> <font color="#00BFFF">病史内容：</font>  </div>
+				<div id="bingli" style="margin-left: 14px;">
+					<table>
+						<tr>
+							<td>主诉：</td>
+							<td> <input type="text" class="inputtext"  /> </td>
+						</tr>						
+						<tr>
+							<td>现病治疗情况：</td>
+							<td> <input type="text" class="inputtext"  /> </td>
+						</tr>						
+						<tr>
+							<td>既往史：</td>
+							<td> <input type="text" class="inputtext"  /> </td>
+						</tr>						
+						<tr>
+							<td>过敏史：</td>
+							<td> <input type="text" class="inputtext"  /> </td>
+						</tr>						
+						<tr>
+							<td>体格检查：</td>
+							<td> <input type="text" class="inputtext" /> </td>
+						</tr>	
+						<tr>
+							<td>检查建议：</td>
+							<td> <input type="text" class="inputtext" /> </td>
+						</tr>						
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+	
+</html>

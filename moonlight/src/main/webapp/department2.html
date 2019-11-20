@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>用友云HIS管理系统</title>
+		<style type="text/css">
+			#kus{
+				color:red;
+				margin-left:531px;
+				margin-top:10px;
+				background-color:#444444;
+			}
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			.font{
+				color:#444444;
+				font-family:'宋体';
+			}
+			
+			#mm{
+				width: 200px;
+    			height: 25px;
+    			border: 1px solid #708090;
+			}
+			.cha{
+				border-radius: 5px;
+				width:50px;
+			}
+			a{
+				color:#A52A2A;
+			}
+			.gridtable{
+				text-align:center;
+			}
+			#ps{
+				border-radius: 5px;
+				width:69px;
+				background-color:#AFEEEE;
+			}
+			.cc{
+			 	width: 200px;
+			 	position:absolute;
+			 	right:5px;
+			 	top:20px;
+		 	}
+		 	#ml{
+		 		position:relative;
+		 	}
+		 	
+		</style>
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/pagination.js"></script>
+		<script type="text/javascript" src="js/dels.js"></script>
+		<script src="script/lib/jquery.min.js"></script>
+		<script src="script/jquery.pagination.js"></script>  
+		<link rel="stylesheet" href="style/common.css">  
+		<link rel="stylesheet" href="style/pagination.css">
+		<link rel="stylesheet" href="css/depttable.css">
+
+
+		<script type="text/javascript">
+			
+				function add(){
+					
+					window.open('insert.html','','width=600,height=600,left=500,top=100');
+				}
+				
+				function update(id){
+					open('edit.html?id='+id,'','width=600,height=600,left=500,top=100');
+				}
+				
+				function logout(){
+					$.ajax({
+						type:"get",
+						url:"user/logout.action",
+						success:function(resp){
+							sessionStorage.clear();
+							alert("退出登录");
+							location.href="login.html";
+						},
+						error:function(){
+							alert("加载数据失败");
+						}
+					});
+				}
+
+				$(function(){
+					$.ajax({
+						type:"get",
+						url:"department/depts.action",
+						success:function(resp){
+							$.each(resp,function(k,v){
+								//alert(v.deptcode+"-"+v.deptname+"-"+v.constantitem.constantname+"-"+v.depttype);
+								var html = "";
+								html+="<tr style='background-color: #BBFF66;' class='font'><th><input type='checkbox' value='"+v.id+"' name='cks'/></th><td>"+v.deptcode+"</td><td>"+v.deptname+"</td><td>"+v.constantitem.constantname+"</td><td>"+pan(v.depttype)+"</td><td><a href='javascript:void(0)' onclick=del(this,"+v.id+")>删除</a></td><td><a href='javascript:void(0)' onclick=update("+v.id+")>编辑</a></td></tr>";
+								$('#dt').append(html);
+							});
+
+						},
+						error:function(){
+							alert("加载页面失败");
+						}
+					});
+				});
+
+
+				function pan(num){
+					if(num==1){
+						return "临床";
+					}else if(num==2){
+						return "医技";
+					}else if(num==3){
+						return "财务";
+					}else if(num==4){
+						return "行政";
+					}else if(num==5){
+						return "其它";
+					}
+				}
+
+				function add(){
+
+					window.open('insert.html','','width=600,height=600,left=500,top=100');
+				}
+
+				function update(id){
+					open('edit.html?id='+id,'','width=600,height=600,left=500,top=100');
+				}
+
+				function del(t,id){
+					var $this = $(t);
+					$.ajax({
+						type:"post",
+						url:"department/delete.action?id="+id,
+						success:function(resp){
+							if(resp=='success'){
+								alert("删除成功");
+								$this.parentsUntil('tbody').remove();
+							}else{
+								alert("删除失败");
+							}
+						},
+						error:function(){
+							alert("加载数据失败");
+						}
+					});
+				}
+
+				function every() {
+					if ($("[name='cks']").prop("checked")) {
+						$("[name='cks']").prop("checked", "")
+					} else {
+						$("[name='cks']").prop("checked", "checked")
+					}
+				}
+
+
+				$(function(){
+					$('#findby').click(function(){
+						var flag = $('#mm').val();
+						$.ajax({
+							type:"get",
+							url:"department/selDeptByNameorCode.action",
+							data:"flag="+flag,
+							success:function(resp){
+								$('tr').next().remove();
+								$.each(resp,function(k,v){
+									//alert(v.deptcode+"-"+v.deptname+"-"+v.constantitem.constantname+"-"+v.depttype);
+									var html = "";
+									html+="<tr style='background-color: #BBFF66;' class='font'><th><input type='checkbox' value='"+v.id+"' name='cks'/></th><td>"+v.deptcode+"</td><td>"+v.deptname+"</td><td>"+v.constantitem.constantname+"</td><td>"+pan(v.depttype)+"</td><td><a href='javascript:void(0)' onclick=del(this,"+v.id+")>删除</a></td><td><a href='javascript:void(0)' onclick=update("+v.id+")>编辑</a></td></tr>";
+									$('#dt').append(html);
+								});
+							},
+							error:function(){
+								alert("页面加载失败");
+							}
+						});
+
+					});
+				});
+		</script>
+		
+		<script type="text/javascript">
+			function del(t,id){
+				var $this = $(t);
+				$.ajax({
+					type:"post",
+					url:"department/delete.action?id="+id,
+					success:function(resp){
+						if(resp=='success'){
+							alert("删除成功");	
+							$this.parentsUntil('tbody').remove();
+						}else{
+							alert("删除失败");
+						}
+					},
+					error:function(){
+						alert("加载数据失败");
+					}
+				});
+			}
+			
+		</script>
+		
+		<script type="text/javascript">
+		function every() {
+			if ($("[name='cks']").prop("checked")) {
+				$("[name='cks']").prop("checked", "")
+			} else {
+				$("[name='cks']").prop("checked", "checked")
+			}
+		}
+		</script>
+
+	
+	<script type="text/javascript">
+		$(function(){
+			if(sessionStorage.getItem("username")!=null){
+				$('#uname').html(sessionStorage.getItem("username"));
+			}else{
+				alert("请先登录");
+				location.href="login.html";
+			}
+			
+			$('#findby').click(function(){
+				var flag = $('#mm').val();
+				$.ajax({	
+					type:"get",
+					url:"department/selDeptByNameorCode.action",
+					data:"flag="+flag,
+					success:function(resp){
+						$('tr').next().remove();
+						$.each(resp,function(k,v){
+							//alert(v.deptcode+"-"+v.deptname+"-"+v.constantitem.constantname+"-"+v.depttype);
+							var html = "";
+							html+="<tr><td><input type='checkbox' value='"+v.id+"' name='cks'/></td><td>"+v.deptcode+"</td><td>"+v.deptname+"</td><td>"+v.constantitem.constantname+"</td><td>"+pan(v.depttype)+"</td><td><a href='javascript:void(0)' onclick=del(this,"+v.id+")>删除</a></td><td><a href='javascript:void(0)' onclick=update("+v.id+")>编辑</a></td></tr>";
+							$('.gridtable').append(html);
+						});
+					},
+					error:function(){
+						alert("页面加载失败");
+					}
+				}); 
+				
+			});
+		});
+	</script>
+	
+
+</head>
+	<body>
+	<div style="margin-top:8px" align="center" id="ml">
+		<input type="text" name="mohu" id="mm"/>&nbsp;&nbsp;
+		<input type="button" style="background-color: #AFEEEE;" value="查询" id="findby" class="cha"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="button" style="background-color: #AFEEEE;" value="新增" onclick="add()" class="cha"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="button"  name="ban"  value="批量删除" id="ps"/>
+		<div  class="cc">
+			<font id="uname" style="color:black"></font>
+			<a href="javascript:void(0)" onclick="logout()" style="color:red">注销</a>
+		</div>
+	</div>
+		<br/>
+		<div class="content">
+			<table class="gridtable">
+			
+			</table>
+		</div>
+		<div class="setPageDiv">
+            <div class="m-style M-box" id="pagination"></div>
+ 		</div>
+
+
+
+	<div style="padding-top: 15px;" align="center">
+		<input type="text" name="mohu" id="mm"/>&nbsp;<input type="button" style="background-color: #77FFCC;" value="查询" id="findby"/>&nbsp;&nbsp;&nbsp;<input type="button" style="background-color: #77FFCC;" value="新增" onclick="add()">
+	</div>
+	<br/>
+	<table id="dt" border="1px soild" align="center">
+		<tr style="background-color:#FFBB66;">
+			<th colspan="7"><font color="#7744FF">科室管理表</font></th>
+		</tr>
+		<tr style="background-color:#FFBB66;">
+			<td><input type="button" name="shy" value="全选" style="background-color: #FF7744;" onclick="every()"/></td>
+			<td>科室编号</td>
+			<td>科室名称</td>
+			<td>科室分类</td>
+			<td>科室类别</td>
+			<td>操作1</td>
+			<td>操作2</td>
+		</tr>
+
+	</table>
+	<input type="button" name="ban" value="批量删除" id="kus">
+	</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+		<script type="text/javascript">
+		$(function(){
+			/*获取发票号  */
+			$.ajax({
+				type:"get",
+				url:"invoice/getInvoiceNum.action",
+				success: function(resp){
+					var i=1+	parseInt(resp);
+					$('#InvoiceNum').val(i);
+				},
+				error: function(){
+					alert("失败")
+				}
+			});
+			
+			//获得科室列表
+			$.ajax({
+				type:"get",
+				url:"user/getalldept.action",
+				success:function(resp){
+					var html="";
+					$.each(resp,function(k,v){
+						html+='<option value="'+v.id+'">'+v.deptname+'</option>';
+					});
+					$('#dept').append(html);
+				},
+				error:function(){
+					alert("加载数据失败");
+				}
+			});
+		/* 获取挂号级别 */
+	/* 		$.ajax({
+				type:"get",
+				url:"register/getRegistlevel.action",
+				success:function(resp){
+					var html="";
+					$.each(resp,function(k,v){
+						html+='<option value="'+v.registname+'">'+v.registname+'</option>';
+					});
+					$('#level').append(html);
+				},
+				error:function(){
+					alert("加载数据失败");
+				}
+			});  */
+			//alert(day+noon+dept+level);//测试
+			//得到医生列表
+			$('#level').change(function(){	
+				var day = $('#day').val();
+				var noon = $('#noon').val();
+				var dept = $('#dept').val();
+				var level=$('#level').val();
+				alert(day+noon+dept+level);
+				$.ajax({
+					type:"post",
+					url:"register/getUser.action",
+					data:"visitdate="+day+"&noon="+noon+"&dept.id="+dept+"&registLevel.id="+level,
+					success:function(resp){
+						var html="";
+						$.each(resp,function(k,v){
+							
+							html+='<option value="'+v.userid+'">'+v.realname+'</option>';
+							
+						});
+						$('#doctor').append(html);
+						
+					},
+					error: function(){
+						alert("错误");
+					}
+				});});
+			
+		
+		});
+		
+		/*  获取病历号*/
+		$(function(){
+			$.ajax({
+				type:"get",
+				url:"register/getMaxReNum.action",
+				success: function(resp){
+					var j = 1+parseInt(resp);
+					$('#Casenum').val(j);
+				},
+				error: function(){
+					alert("失败")
+				}
+			});
+		});
+		
+		$(function(){
+			if(sessionStorage.getItem("id")!=null){
+			$('#uname').html(sessionStorage.getItem("username"));
+			}else{
+				alert("请先登录");
+				location.href="login.html";
+				}
+		});
+		
+		
+		
+		function logout(){
+			$.ajax({
+				type:"post",
+				url:"user/logout.action",
+				success:function(resp){
+					if("success"==resp){
+						sessionStorage.clear();
+						alert("退出登录");
+						location.href="login.html";
+					}else{
+						alert("失败");
+					}
+				},
+				error:function(){
+					alert("失败");
+				}
+			});
+		}
+		
+		/* 获取下拉列表的值 */
+	
+		</script>
+		<style type="text/css">
+			#title{
+				width: 100%;
+				height:40px;
+				background-color: deepskyblue;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="title"><font style="color: beige;" size="6">东软云医院HIS系统</font> <div style="float: right; "><span id="uname" ></span>&nbsp;<a href="javascript:void(0)" onclick="logout()">注销</a></div> </div>
+		<table>
+			<tr>
+				<td><font color="red">*</font>发票号：</td><td><input type="text" name="InvoiceNum" id="InvoiceNum"/></td>
+				<td><input type="button" value="挂号" style="background-color: aqua;" id="save"/> </td>
+				<td><input type="button" value="清空" style="background-color: aqua;" id="del"/> </td>
+			</tr>
+			<tr>
+				<td>挂号信息</td>
+			</tr>
+			<tr>
+				<td><font color="red">*</font>病历号：</td><td><input type="text" name="Casenum" id="Casenum"/></td>
+				<td><font color="red">*</font>姓名：</td><td><input type="text" name="Realname" id="Realname"/ style="width: 120px;"></td>
+				<td><font color="red">*</font>性别：</td>
+				<td><select>
+					<option>男</option>
+					<option>女</option>
+				</select></td>
+				<td><font color="red">*</font>年龄：</td><td><input type="text" name="age" id="age" style="width: 100px;"/></td>
+				<td><select>
+					<option>岁</option>
+					<option>月</option>
+					<option>天</option>
+				</select></td>
+			</tr>
+			<tr>
+				<td><font color="red">*</font>出生日期：</td><td><input type="date" name="Date" id="Date"/></td>
+				<td><font color="red">*</font>身份证号：</td><td><input type="text" name="ID" id="ID"/></td>
+				<td><font color="red">*</font>家庭住址：</td><td><input type="text" name="adress" id="adress"/></td>
+			</tr>
+			<tr>
+				<td><font color="red">*</font>结算类别：</td>
+				<td><select>
+					<option></option>
+				</select></td>
+				<td><font color="red">*</font>看诊日期：</td><td><input type="date" name="day" id="day"/></td>
+				<td><font color="red">*</font>午别：</td>
+				<td><select id="noon">
+					<option  value ="上午">上午</option>
+					<option value="下午">下午</option>
+				</select></td>
+				<td><font color="red">*</font>挂号科室：</td>
+				<td><select id="dept"></select></td>
+			</tr>
+			<tr>
+				<td><font color="red">*</font>号别：</td>
+				<td><select id="level">
+					<option></option>
+					<option  value="1">专家号</option>
+					<option value="2">普通号</option>
+				</select></td>
+				<td><font color="red">*</font>看诊医生：</td>
+				<td><select id="doctor">
+				</select></td>
+				<td>初始号额：</td><td><input type="text" name="muns" id="muns" style="width: 100px;"/></td>
+				<td></font>已用号额：</td><td><input type="text" name="nume" id="nume" style="width: 100px;"/></td>
+			</tr>
+			<tr>
+				<td></font>病例本：</td><td> <input type="checkbox"/></td>
+				<td><font color="red">*</font>应收金额：</td><td><input type="text" name="nume" id="nume" style="width: 100px;"/></td>
+				<td><font color="red">*</font>收费方式：</td>
+				<td><select id="type">
+					<option></option>
+				</select></td>
+			</tr>
+		</table>
+	</body>
+</html>

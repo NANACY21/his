@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+	$(function () {
+		var loc = location.href;
+		var id = loc.split('id=')[1];
+		$.ajax({
+			type:"post",
+			url:"department/getDeptById.action?id="+id,
+			success: function (resp) {
+				$('#code').val(resp.deptcode);
+				$('#name').val(resp.deptname);
+				$('#dID').val(resp.deptcategoryid);
+				$('#type').val(resp.depttype);
+			},
+			error : function() {
+				alert("错误");
+			}
+		}); 
+		$('#save').click(function(){
+			var code = $('#code').val();
+			var name = $('#name').val();
+			var did = $('#dID').val();
+			var type = $('#type').val();
+			var loc = location.href;
+			var id = loc.split('id=')[1];
+			$.ajax({
+				type:"post",
+				url:"department/updatedept.action",
+				contentType:"application/json",
+				//data:"deptcode="+code+"&deptname="+name+"&deptcategoryid="+did+"&depttype"+type,
+				data:'{"id":"'+id+'","deptcode":"'+code+'","deptname":"'+name+'","deptcategoryid":"'+did+'","depttype":"'+type+'"}',
+				success:function(resp){
+					if(resp=="success"){
+						alert("添加成功");
+						var par = window.opener;
+						par.location.reload();
+						window.close();
+					}else{
+						alert("添加失败");
+					}
+					
+				},
+				error:function(){
+					alert("错误");
+				}
+			});
+			 
+			
+		})
+		
+		
+	});
+
+
+
+
+</script>
+<style>
+		#addbg{
+			width: 260px;
+			margin: 0 auto;
+			background-color: #00BFFF;
+			margin-top: 16%;
+		}
+	</style>
+	</head>
+	<body>
+		<div id="addbg">
+			<center>
+				<h2>请输入内容</h2>
+			<table id="adddept">
+				<tr>
+					<td>科室编号</td>
+					<td><input type="text" name="code" id="code"></td>
+				</tr>
+				<tr>
+					<td>科室名称</td>
+					<td><input type="text" name="name" id="name"></td>
+				</tr>
+				<tr>
+					<td>科室分类</td>
+					<td><input type="text" name="dID" id="dID"></td>
+				</tr>
+				<tr>
+					<td>科室类别</td>
+					<td><input type="text" name="type" id="type"></td>
+				</tr>
+				<tr>
+					<td><input type="button" name="save" onclick="save()" id="save" value="确认" style=" background-color:deepskyblue ; margin-left: 30px;"></td>
+					<td><input type="button" name="quit" id="quit" onclick="quit()" value="取消" style=" background-color:deepskyblue; margin-left: 40px;"></td>
+				</tr>
+			</table>
+			</center>
+		</div>
+	</body>
+</html>

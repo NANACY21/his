@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.personal.mapper.MedicalrecordMapper" >
+  <resultMap id="BaseResultMap" type="com.personal.pojo.Medicalrecord" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="CaseNumber" property="casenumber" jdbcType="VARCHAR" />
+    <result column="RegistID" property="registid" jdbcType="INTEGER" />
+    <result column="Readme" property="readme" jdbcType="VARCHAR" />
+    <result column="Present" property="present" jdbcType="VARCHAR" />
+    <result column="PresentTreat" property="presenttreat" jdbcType="VARCHAR" />
+    <result column="History" property="history" jdbcType="VARCHAR" />
+    <result column="Allergy" property="allergy" jdbcType="VARCHAR" />
+    <result column="Physique" property="physique" jdbcType="VARCHAR" />
+    <result column="Proposal" property="proposal" jdbcType="VARCHAR" />
+    <result column="Careful" property="careful" jdbcType="VARCHAR" />
+    <result column="CheckResult" property="checkresult" jdbcType="VARCHAR" />
+    <result column="Diagnosis" property="diagnosis" jdbcType="VARCHAR" />
+    <result column="Handling" property="handling" jdbcType="VARCHAR" />
+    <result column="CaseState" property="casestate" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, CaseNumber, RegistID, Readme, Present, PresentTreat, History, Allergy, Physique, 
+    Proposal, Careful, CheckResult, Diagnosis, Handling, CaseState
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from medicalrecord
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="Integer" >
+    delete from medicalrecord
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.neusoft.neuhis.pojo.Medicalrecord" >
+    insert into medicalrecord (ID, CaseNumber, RegistID, 
+      Readme, Present, PresentTreat, 
+      History, Allergy, Physique, 
+      Proposal, Careful, CheckResult, 
+      Diagnosis, Handling, CaseState
+      )
+    values (#{id,jdbcType=INTEGER}, #{casenumber,jdbcType=VARCHAR}, #{registid,jdbcType=INTEGER}, 
+      #{readme,jdbcType=VARCHAR}, #{present,jdbcType=VARCHAR}, #{presenttreat,jdbcType=VARCHAR}, 
+      #{history,jdbcType=VARCHAR}, #{allergy,jdbcType=VARCHAR}, #{physique,jdbcType=VARCHAR}, 
+      #{proposal,jdbcType=VARCHAR}, #{careful,jdbcType=VARCHAR}, #{checkresult,jdbcType=VARCHAR}, 
+      #{diagnosis,jdbcType=VARCHAR}, #{handling,jdbcType=VARCHAR}, #{casestate,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.neusoft.neuhis.pojo.Medicalrecord" >
+    insert into medicalrecord
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="casenumber != null" >
+        CaseNumber,
+      </if>
+      <if test="registid != null" >
+        RegistID,
+      </if>
+      <if test="readme != null" >
+        Readme,
+      </if>
+      <if test="present != null" >
+        Present,
+      </if>
+      <if test="presenttreat != null" >
+        PresentTreat,
+      </if>
+      <if test="history != null" >
+        History,
+      </if>
+      <if test="allergy != null" >
+        Allergy,
+      </if>
+      <if test="physique != null" >
+        Physique,
+      </if>
+      <if test="proposal != null" >
+        Proposal,
+      </if>
+      <if test="careful != null" >
+        Careful,
+      </if>
+      <if test="checkresult != null" >
+        CheckResult,
+      </if>
+      <if test="diagnosis != null" >
+        Diagnosis,
+      </if>
+      <if test="handling != null" >
+        Handling,
+      </if>
+      <if test="casestate != null" >
+        CaseState,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="casenumber != null" >
+        #{casenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="registid != null" >
+        #{registid,jdbcType=INTEGER},
+      </if>
+      <if test="readme != null" >
+        #{readme,jdbcType=VARCHAR},
+      </if>
+      <if test="present != null" >
+        #{present,jdbcType=VARCHAR},
+      </if>
+      <if test="presenttreat != null" >
+        #{presenttreat,jdbcType=VARCHAR},
+      </if>
+      <if test="history != null" >
+        #{history,jdbcType=VARCHAR},
+      </if>
+      <if test="allergy != null" >
+        #{allergy,jdbcType=VARCHAR},
+      </if>
+      <if test="physique != null" >
+        #{physique,jdbcType=VARCHAR},
+      </if>
+      <if test="proposal != null" >
+        #{proposal,jdbcType=VARCHAR},
+      </if>
+      <if test="careful != null" >
+        #{careful,jdbcType=VARCHAR},
+      </if>
+      <if test="checkresult != null" >
+        #{checkresult,jdbcType=VARCHAR},
+      </if>
+      <if test="diagnosis != null" >
+        #{diagnosis,jdbcType=VARCHAR},
+      </if>
+      <if test="handling != null" >
+        #{handling,jdbcType=VARCHAR},
+      </if>
+      <if test="casestate != null" >
+        #{casestate,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.neusoft.neuhis.pojo.Medicalrecord" >
+    update medicalrecord
+    <set >
+      <if test="casenumber != null" >
+        CaseNumber = #{casenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="registid != null" >
+        RegistID = #{registid,jdbcType=INTEGER},
+      </if>
+      <if test="readme != null" >
+        Readme = #{readme,jdbcType=VARCHAR},
+      </if>
+      <if test="present != null" >
+        Present = #{present,jdbcType=VARCHAR},
+      </if>
+      <if test="presenttreat != null" >
+        PresentTreat = #{presenttreat,jdbcType=VARCHAR},
+      </if>
+      <if test="history != null" >
+        History = #{history,jdbcType=VARCHAR},
+      </if>
+      <if test="allergy != null" >
+        Allergy = #{allergy,jdbcType=VARCHAR},
+      </if>
+      <if test="physique != null" >
+        Physique = #{physique,jdbcType=VARCHAR},
+      </if>
+      <if test="proposal != null" >
+        Proposal = #{proposal,jdbcType=VARCHAR},
+      </if>
+      <if test="careful != null" >
+        Careful = #{careful,jdbcType=VARCHAR},
+      </if>
+      <if test="checkresult != null" >
+        CheckResult = #{checkresult,jdbcType=VARCHAR},
+      </if>
+      <if test="diagnosis != null" >
+        Diagnosis = #{diagnosis,jdbcType=VARCHAR},
+      </if>
+      <if test="handling != null" >
+        Handling = #{handling,jdbcType=VARCHAR},
+      </if>
+      <if test="casestate != null" >
+        CaseState = #{casestate,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.neusoft.neuhis.pojo.Medicalrecord" >
+    update medicalrecord
+    set CaseNumber = #{casenumber,jdbcType=VARCHAR},
+      RegistID = #{registid,jdbcType=INTEGER},
+      Readme = #{readme,jdbcType=VARCHAR},
+      Present = #{present,jdbcType=VARCHAR},
+      PresentTreat = #{presenttreat,jdbcType=VARCHAR},
+      History = #{history,jdbcType=VARCHAR},
+      Allergy = #{allergy,jdbcType=VARCHAR},
+      Physique = #{physique,jdbcType=VARCHAR},
+      Proposal = #{proposal,jdbcType=VARCHAR},
+      Careful = #{careful,jdbcType=VARCHAR},
+      CheckResult = #{checkresult,jdbcType=VARCHAR},
+      Diagnosis = #{diagnosis,jdbcType=VARCHAR},
+      Handling = #{handling,jdbcType=VARCHAR},
+      CaseState = #{casestate,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

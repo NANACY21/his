@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.personal.mapper.DepartmentMapper" >
+  <resultMap id="BaseResultMap" type="com.personal.pojo.Department" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="DeptCode" property="deptcode" jdbcType="VARCHAR" />
+    <result column="DeptName" property="deptname" jdbcType="VARCHAR" />
+	<result column="DeptCategoryID" property="deptcategoryid" jdbcType="INTEGER" />
+    <result column="DeptType" property="depttype" jdbcType="INTEGER" />
+    <result column="DelMark" property="delmark" jdbcType="INTEGER" />
+    <association property="constantItem" javaType="ConstantItem">
+    	<id column="cid" property="id" jdbcType="INTEGER" />
+	    <result column="ConstantCode" property="constantcode" jdbcType="VARCHAR" />
+	    <result column="ConstantName" property="constantname" jdbcType="VARCHAR" />
+    </association>
+    
+  </resultMap>
+
+	<sql id="Base_Column_List" >
+    ID, DeptCode, DeptName, DeptCategoryID, DeptType, DelMark
+  </sql>
+	<sql id="Base_Column_List_1" >
+    d.ID, d.DeptCode, d.DeptName, d.DeptType,c.ConstantName, d.DelMark
+  </sql>
+	<select id="selectDeptNames" resultMap="BaseResultMap">
+  	select d.id,d.deptname
+  	from department d
+  	where d.depttype=1
+  </select>
+	<select id="selectDeptCategoryID" resultMap="BaseResultMap">
+  	SELECT DISTINCT d.DeptCategoryID,c.ConstantName FROM department d join constantitem c on d.DeptCategoryID=c.id
+  </select>
+ 	<select id="selectDepartmentById" resultMap="BaseResultMap" parameterType="int">
+ 		select  d.ID,d.DeptCode,d.DeptName,d.DeptType,c.ID cid,c.ConstantName  from department d  join constantitem c on d.DeptCategoryID = c.ID  where d.id=#{id}  and d.DelMark=1
+ 	</select>
+ 	<select id="selectAllDepartments" resultMap="BaseResultMap">
+ 		select  d.ID,d.DeptCode,d.DeptName,d.DeptType,c.ID cid,c.ConstantName  from department d  join constantitem c on d.DeptCategoryID = c.ID where  d.DelMark=1
+ 	</select>
+
+	<select id="selectdepts" parameterType="com.neusoft.neuhis.utils.PageBean" resultMap="BaseResultMap">
+  	select
+  	d.ID, d.DeptCode, d.DeptName, d.DeptType,c.ConstantName, d.DelMark
+  	from department d join constantitem c on d.DeptCategoryID = c.id limit #{offset},#{pageSize}
+  </select>
+
+	<!--<select id="selectDepts" resultMap="BaseResultMap">-->
+		<!--select-->
+		<!--<include refid="Base_Column_List_1" />-->
+		<!--from department d join constantitem c on d.DeptCategoryID=c.id-->
+	<!--</select>-->
+	<select id="getTotal" resultType="int">
+  	select count(*) from department
+  </select>
+	<select id="selectDeptTypes" resultMap="BaseResultMap">
+  	select distinct DeptType from department
+  </select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Integer" >
+		select
+		<include refid="Base_Column_List" />
+		from department
+		where ID = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="getDeptByNameOrNo"  resultMap="BaseResultMap" >
+		select
+		<include refid="Base_Column_List_1" />
+		from department d join constantitem c on d.DeptCategoryID = c.id
+		<where>
+            <if test="deptcode != null">
+                AND deptcode LIKE CONCAT(CONCAT('%',#{deptcode},'%'))
+                AND deptname LIKE CONCAT(CONCAT('%',#{deptname},'%'))
+            </if>
+		</where>
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="Integer" >
+    delete from department
+    where ID = #{id,jdbcType=INTEGER}
+  	</delete>
+
+ 	<select id="selectAllDepartmentsPages" resultMap="BaseResultMap" parameterType="com.personal.utils.PageBean">
+ 		select  d.ID,d.DeptCode,d.DeptName,d.DeptType,c.ID cid,c.ConstantName  from department d  join constantitem c on d.DeptCategoryID = c.ID where  d.DelMark=1 limit #{offset},#{pageSize}
+ 	</select>
+ 	<insert id="insertDepartment" parameterType="Department">
+ 		insert into department(DeptCode,DeptName,DeptCategoryID,DeptType) values(#{deptcode},#{deptname},#{constantItem.id},#{depttype})
+ 	</insert>
+ 	
+ 	<update id="deleteDepartmentById" parameterType="int">
+ 		update department set delmark = 0 where id =#{id}
+ 	</update>
+ 	
+ 	<update id="updateDepartment" parameterType="Department">
+ 		update department
+ 	<set >
+      <if test="deptcode != null" >
+        DeptCode = #{deptcode},
+      </if>
+      <if test="deptname != null" >
+        DeptName = #{deptname},
+      </if>
+      <if test="constantItem!= null and constantItem.id != null" >
+        DeptCategoryID = #{constantItem.id},
+      </if>
+      <if test="depttype != null" >
+        DeptType = #{depttype},
+      </if>
+    </set>
+    where ID = #{id}
+ 	</update>
+ 	
+ 	<select id="selectDepartmentByMessage" parameterType="Department" resultMap="BaseResultMap">
+ 		select  d.ID,d.DeptCode,d.DeptName,d.DeptType,c.ID cid,c.ConstantName  from department d  join constantitem c on d.DeptCategoryID = c.ID 
+ 		<where>
+ 			<if test="deptcode!=null">
+ 				and DeptCode = #{deptcode}
+ 			</if>
+ 			<if test="deptname!=null">
+ 				and DeptName = #{deptname}
+ 			</if>
+ 			<if test="constantItem!=null and constantItem.id!=null">
+ 				and DeptCategoryID = #{constantItem.id}
+ 			</if>
+ 			<if test="depttype!=null">
+ 				and DeptType = #{depttype}
+ 			</if>
+ 		</where>
+ 	</select>
+ 	
+ 	<select id="getCount" resultType="int">
+ 		select  count(d.id)  from department d  join constantitem c on d.DeptCategoryID = c.ID where  d.DelMark=1
+ 	</select>
+
+	<insert id="insert" parameterType="com.neusoft.neuhis.pojo.Department" >
+    insert into department ( DeptCode, DeptName,
+      DeptCategoryID, DeptType
+      )
+    values (#{deptcode,jdbcType=VARCHAR}, #{deptname,jdbcType=VARCHAR},
+      #{deptcategoryid,jdbcType=INTEGER}, #{depttype,jdbcType=INTEGER}
+      )
+  </insert>
+	<insert id="insertSelective" parameterType="com.neusoft.neuhis.pojo.Department" >
+		insert into department
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="deptcode != null" >
+				DeptCode,
+			</if>
+			<if test="deptname != null" >
+				DeptName,
+			</if>
+			<if test="deptcategoryid != null" >
+				DeptCategoryID,
+			</if>
+			<if test="depttype != null" >
+				DeptType,
+			</if>
+			<if test="delmark != null" >
+				DelMark,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null" >
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="deptcode != null" >
+				#{deptcode,jdbcType=VARCHAR},
+			</if>
+			<if test="deptname != null" >
+				#{deptname,jdbcType=VARCHAR},
+			</if>
+			<if test="deptcategoryid != null" >
+				#{deptcategoryid,jdbcType=INTEGER},
+			</if>
+			<if test="depttype != null" >
+				#{depttype,jdbcType=INTEGER},
+			</if>
+			<if test="delmark != null" >
+				#{delmark,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.neusoft.neuhis.pojo.Department" >
+		update department
+		<set >
+			<if test="deptcode != null" >
+				DeptCode = #{deptcode,jdbcType=VARCHAR},
+			</if>
+			<if test="deptname != null" >
+				DeptName = #{deptname,jdbcType=VARCHAR},
+			</if>
+			<if test="deptcategoryid != null" >
+				DeptCategoryID = #{deptcategoryid,jdbcType=INTEGER},
+			</if>
+			<if test="depttype != null" >
+				DeptType = #{depttype,jdbcType=INTEGER},
+			</if>
+		</set>
+		where ID = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.neusoft.neuhis.pojo.Department" >
+    update department
+   	 set DeptCode = #{deptcode,jdbcType=VARCHAR},
+      DeptName = #{deptname,jdbcType=VARCHAR},
+      DeptCategoryID = #{deptcategoryid,jdbcType=INTEGER},
+      DeptType = #{depttype,jdbcType=INTEGER}
+
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+	<select id="mohusel" parameterType="java.lang.String" resultMap="BaseResultMap">
+ 	select d.id,d.DeptCode,d.DeptName,c.ConstantName,d.DeptType from department d join constantitem c on d.DeptCategoryID=c.id where d.DeptCode like "%"#{DeptCode}"%" or d.DeptName like "%"#{DeptName}"%"
+ </select>
+</mapper>

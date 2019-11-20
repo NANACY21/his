@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+           " default-autowire="no">
+    <!-- 加载properties文件 -->
+    <context:property-placeholder location="classpath:db.properties"/>
+    <!--dao层
+    整合mybatis-->
+
+    <!--获取数据源-->
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+        <property name="driverClassName">
+            <value>${jdbc.driver}</value>
+        </property>
+        <property name="url">
+            <value>${jdbc.url}</value>
+        </property>
+        <property name="username">
+            <value>${jdbc.username}</value>
+        </property>
+        <property name="password">
+            <value>${jdbc.password}</value>
+        </property>
+    </bean>
+
+    <!--整合dao
+    获取SqlSessionFactory对象
+    把sqlSessionFactory当成bean交给spring管理-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        <!--使找到映射xml文件！！！-->
+        <property name="mapperLocations" value="classpath:mapper/*Mapper.xml" />
+        <property name="configLocation" value="classpath:SqlMapConfig.xml"></property>
+    </bean>
+
+
+    <!--获取mapper接口时会自动生成实现mapper接口的对象的代理对象
+    注意：mapper接口都必须放在该mapper包下-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- Mapper接口所在的包名  多个包用，分割 -->
+        <property name="basePackage" value="com.personal.mapper"></property>
+        <!-- 注入sqlSessionFactory  是value-->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+</beans>

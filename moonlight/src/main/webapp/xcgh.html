@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>挂号</title>
+		<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+		<script type="text/javascript" src="js/xcgh.js"></script>
+		<link rel="stylesheet" href="css/xcgh.css">
+	</head>
+	<body>
+		<div id="aa">
+			<h1 style="color: white; margin-left: 20px; padding-top:5px ;">东软云医院HIS系统</h1>
+			<div  class="km">
+				<font id="uname" style="color:white"></font>
+				<a href="javascript:void(0)" onclick="logout()" style="color:red">注销</a>
+			</div>
+		
+		
+		<div id="bb">
+			<font class="cc">发票号</font>
+			<input type="text" name="fph" value=""/>
+			<input type="button" value="挂号" class="dd" id="guahao"/>
+			<input type="button" value="清空" class="dd"/>
+		</div>
+		
+		<table id="ee">
+			<tr><td><h3>挂号信息</h3></td></tr>
+			<tr>
+				<td>病历号:<input type="text" name="blh"/>&nbsp;&nbsp;&nbsp;</td>
+				<td>姓名:<input type="text" name="xm" placeholder="请输入姓名"/>&nbsp;&nbsp;&nbsp;</td>
+				<td>性别:<select id="sex"><option value="71">男</option><option value="72">女</option></select>&nbsp;&nbsp;&nbsp;</td>
+				<td>出生日期:<input type="date" name="birthday" placeholder="出生日期"/>&nbsp;&nbsp;&nbsp;</td>
+			</tr>
+			<tr></tr>
+			<tr>
+				<td>年龄:<input type="text" name="age" placeholder="请输入年龄"/></td>
+				<td><select id="nllx"><option>岁</option><option>月</option><option>天</option></select></td>
+				<td>身份证号:<input type="text" name="sfzh" placeholder="请输入身份证号"/>&nbsp;&nbsp;&nbsp;</td>
+				<td>家庭住址:<input type="text" name="jtzz" placeholder="请输入家庭住址"/>&nbsp;&nbsp;&nbsp;</td>
+			</tr>
+			<tr>
+				<td>结算类别:<select id="jslb"></select>&nbsp;&nbsp;&nbsp;</td>
+				<td>看诊日期:<input type="date" name="kzrq" id="ddyy" value=""/></td>
+				<td>午别:<select id="wb"></select>&nbsp;&nbsp;&nbsp;</td>
+				<td>挂号科室:<select id="ghks"></select>&nbsp;&nbsp;&nbsp;</td>
+			</tr>
+			<tr>
+				<td>号别:<select id="hb"><option value=""></option></select></td>
+				<td>看诊医生:<select id="kzys"></select>&nbsp;&nbsp;&nbsp;</td>
+				<td>初始号额:<input type="text" name="" placeholder="初始号额"/>&nbsp;&nbsp;&nbsp;</td>
+				<td>已用号额:<input type="text" name="" placeholder="已用号额"/>&nbsp;&nbsp;&nbsp;</td>
+			</tr>
+			<tr>
+				<td>病历本<input type="checkbox" id="blb"/></td>
+				<td>应收金额:<input type="text" name="" placeholder="请输入金额"/>&nbsp;&nbsp;&nbsp;</td>
+				<td>收费方式:<select id="skfs"></select>&nbsp;&nbsp;&nbsp;</td>
+			</tr>
+		</table>
+		
+		</div>
+	</body>
+</html>

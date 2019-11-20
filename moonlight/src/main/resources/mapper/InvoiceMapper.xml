@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.neusoft.neuhis.mapper.InvoiceMapper" >
+  <resultMap id="BaseResultMap" type="com.neusoft.neuhis.pojo.Invoice" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="InvoiceNum" property="invoicenum" jdbcType="VARCHAR" />
+    <result column="Money" property="money" jdbcType="DECIMAL" />
+    <result column="State" property="state" jdbcType="INTEGER" />
+    <result column="CreationTime" property="creationtime" jdbcType="TIMESTAMP" />
+    <result column="UserID" property="userid" jdbcType="INTEGER" />
+    <!-- <result column="RegistID" property="registid" jdbcType="INTEGER" /> -->
+    <result column="FeeType" property="feetype" jdbcType="INTEGER" />
+    <result column="Back" property="back" jdbcType="VARCHAR" />
+    <result column="DailyState" property="dailystate" jdbcType="INTEGER" />
+   <!--  <association property="Register" javaType="com.neusoft.neuhis.pojo.Register">
+    	<id column="rid" property="id"/>
+    	<result column="register" property="register"/>
+    </association> -->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, InvoiceNum, Money, State, CreationTime, UserID, RegistID, FeeType, Back, DailyState
+  </sql>
+  <select id="selectMaxID" resultType="int">
+  	SELECT MAX(InvoiceNum)+1 from invoice
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from invoice
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getInvoicenum" resultType="String" >
+    select  max(invoicenum) from invoice 
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="Integer" >
+    delete from invoice
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.neusoft.neuhis.pojo.Invoice" >
+    insert into invoice (ID, InvoiceNum, Money, 
+      State, CreationTime, UserID, 
+      RegistID, FeeType, Back, 
+      DailyState)
+    values (#{id,jdbcType=INTEGER}, #{invoicenum,jdbcType=VARCHAR}, #{money,jdbcType=DECIMAL}, 
+      #{state,jdbcType=INTEGER}, #{creationtime,jdbcType=TIMESTAMP}, #{userid,jdbcType=INTEGER}, 
+      #{registid,jdbcType=INTEGER}, #{feetype,jdbcType=INTEGER}, #{back,jdbcType=VARCHAR}, 
+      #{dailystate,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.neusoft.neuhis.pojo.Invoice" >
+    insert into invoice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="invoicenum != null" >
+        InvoiceNum,
+      </if>
+      <if test="money != null" >
+        Money,
+      </if>
+      <if test="state != null" >
+        State,
+      </if>
+      <if test="creationtime != null" >
+        CreationTime,
+      </if>
+      <if test="userid != null" >
+        UserID,
+      </if>
+      <if test="registid != null" >
+        RegistID,
+      </if>
+      <if test="feetype != null" >
+        FeeType,
+      </if>
+      <if test="back != null" >
+        Back,
+      </if>
+      <if test="dailystate != null" >
+        DailyState,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="invoicenum != null" >
+        #{invoicenum,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="creationtime != null" >
+        #{creationtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="registid != null" >
+        #{registid,jdbcType=INTEGER},
+      </if>
+      <if test="feetype != null" >
+        #{feetype,jdbcType=INTEGER},
+      </if>
+      <if test="back != null" >
+        #{back,jdbcType=VARCHAR},
+      </if>
+      <if test="dailystate != null" >
+        #{dailystate,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.neusoft.neuhis.pojo.Invoice" >
+    update invoice
+    <set >
+      <if test="invoicenum != null" >
+        InvoiceNum = #{invoicenum,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        Money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="state != null" >
+        State = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="creationtime != null" >
+        CreationTime = #{creationtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null" >
+        UserID = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="registid != null" >
+        RegistID = #{registid,jdbcType=INTEGER},
+      </if>
+      <if test="feetype != null" >
+        FeeType = #{feetype,jdbcType=INTEGER},
+      </if>
+      <if test="back != null" >
+        Back = #{back,jdbcType=VARCHAR},
+      </if>
+      <if test="dailystate != null" >
+        DailyState = #{dailystate,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.neusoft.neuhis.pojo.Invoice" >
+    update invoice
+    set InvoiceNum = #{invoicenum,jdbcType=VARCHAR},
+      Money = #{money,jdbcType=DECIMAL},
+      State = #{state,jdbcType=INTEGER},
+      CreationTime = #{creationtime,jdbcType=TIMESTAMP},
+      UserID = #{userid,jdbcType=INTEGER},
+      RegistID = #{registid,jdbcType=INTEGER},
+      FeeType = #{feetype,jdbcType=INTEGER},
+      Back = #{back,jdbcType=VARCHAR},
+      DailyState = #{dailystate,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

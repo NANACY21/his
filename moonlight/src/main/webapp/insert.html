@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$.ajax({
+			type:"get",
+			url:"contantsitem/findnames.action",
+			success:function(resp){
+				$.each(resp,function(k,v){
+					var html="";
+					html+="<option value='"+v.id+"'>"+v.constantname+"</option>";
+					$('#dd').append(html);
+				})
+			},
+			error:function(){
+				alert("加载数据失败")
+			}
+		});
+	});
+</script>
+<script type="text/javascript">
+		
+			function adddept(){
+				
+				var id = $('#num').val();
+				var name = $('#name').val();
+				var kind = $('#dd').val();
+				var type = $('#ee').val();
+				//alert(id+"-"+name+"-"+kind+"-"+type);
+				
+				$.ajax({
+						type:"post",
+						url:"department/add.action",
+						//contentType:"application/json",
+						data:"deptcode="+id+"&deptname="+name+"&deptcategoryid="+kind+"&depttype="+type,
+						//data:{"deptcode":id,"deptname":name,"depttype":type},
+						success:function(resp){
+								alert("添加成功");
+								var par = window.opener;
+								par.location.reload();
+								window.close();
+						},
+						error:function(){
+							alert("加载数据失败");
+						},
+						//dataType:"json"
+					}); 
+			}
+
+</script>
+</head>
+<body>
+
+	科室编码：
+	<input id="num" type="text" name="ksbm" />
+	<br /> 科室名称：
+	<input id="name" type="text" name="ksmc" />
+	<br /> 科室分类：
+	<select id="dd"></select>
+	<br /> 科室类别：
+	<select id="ee">
+		<option value="1">临床</option>
+		<option value="2">医技</option>
+		<option value="3">财务</option>
+		<option value="4">行政</option>
+		<option value="5">其它</option>
+	</select>
+	<br />
+	<br />
+
+	<input type="button" value="保存" onclick="adddept()" />
+
+</body>
+</html>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.personal.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.personal.pojo.User" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="UserName" property="username" jdbcType="VARCHAR" />
+    <result column="Password" property="password" jdbcType="VARCHAR" />
+    <result column="RealName" property="realname" jdbcType="VARCHAR" />
+    <result column="UseType" property="usetype" jdbcType="INTEGER" />
+    <result column="DocTitleID" property="doctitleid" jdbcType="INTEGER" />
+    <result column="IsScheduling" property="isscheduling" jdbcType="CHAR" />
+
+      <!-- <result column="DeptID" property="deptid" jdbcType="INTEGER" />
+      <result column="RegistLeID" property="registleid" jdbcType="INTEGER" /> -->
+    <result column="DelMark" property="delmark" jdbcType="INTEGER" />
+    <association property="constantItem" javaType="ConstantItem">
+    	<id column="cid" property="id" jdbcType="INTEGER" />
+    	<result column="ConstantName" property="constantname" jdbcType="VARCHAR" />
+    </association>
+    <association property="department" javaType="Department">
+    	 <id column="did" property="id" jdbcType="INTEGER" />
+	    <result column="DeptName" property="deptname" jdbcType="VARCHAR" />
+    </association>
+    <association property="registLevel" javaType="RegistLevel">
+    	 <id column="rid" property="id" jdbcType="INTEGER" />
+  		 <result column="RegistName" property="registname" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+ <sql id="usercondition">
+ 	u.DeptID = d.ID and u.RegistLeID = r.ID and  u.usetype= 3  and u.DelMark=1 and r.DelMark=1 and d.DelMark=1  
+ </sql>
+    <select id="selectRealName" resultMap="BaseResultMap">
+  	select id,RealName from user where UseType=#{usetype}
+  </select>
+    <select id="selectUser" parameterType="user" resultMap="BaseResultMap">
+  	select * from user where UserName=#{username} and Password=#{password} and UseType=#{usetype}
+  </select>
+    <select id="selectDoctors" resultMap="BaseResultMap" parameterType="user" >
+  	select u.ID,u.UserName from user u join department d on u.DeptID=d.ID join registlevel r on u.RegistLeID=r.ID where d.id=#{dept.id} and r.id=#{level.id} and u.UseType=3
+  </select>
+ <select id="selectUsersByDeptAndRegistLevel" parameterType="User" resultMap="BaseResultMap">
+ 	select u.id, u.UserName,d.id did ,u.DeptID,u.REgistLeID from `user`  u ,department d,registlevel r
+	<where>  
+  	<include refid="usercondition"></include>
+	<if test="department!=null and department.id!=null">
+		and u.DeptID = #{department.id}
+	</if>
+	<if test="registLevel!=null and registLevel.id!=null">
+		and u.RegistLeID =  #{registLevel.id}
+	</if>
+</where>
+ </select>
+    <select id="getDoctorsByDeptNoAndLevel" resultMap="BaseResultMap" parameterType="user">
+  		select  u.id,u.username from user u, department d,registlevel r  where u.DeptID = d.ID and u.RegistLeID = r.ID  and d.id =#{dept.id}  and r.id=#{registLevel.id} and u.usetype=3 ;
+  </select>
+    <sql id="Base_Column_List" >
+    ID, UserName, Password, RealName, UseType, DocTitleID, IsScheduling, DeptID, RegistLeID,
+    DelMark
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from user
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectByNameAndPass" resultMap="BaseResultMap" parameterType="User" >
+    select *
+    from user
+    where username=#{username} and password=#{password} and usetype=#{usetype}
+  </select>
+    <delete id="deleteByPrimaryKey" parameterType="Integer" >
+    delete from user
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.neusoft.neuhis.pojo.User" >
+    insert into user (ID, UserName, Password,
+      RealName, UseType, DocTitleID,
+      IsScheduling, DeptID, RegistLeID,
+      DelMark)
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+      #{realname,jdbcType=VARCHAR}, #{usetype,jdbcType=INTEGER}, #{doctitleid,jdbcType=INTEGER},
+      #{isscheduling,jdbcType=CHAR}, #{deptid,jdbcType=INTEGER}, #{registleid,jdbcType=INTEGER},
+      #{delmark,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.neusoft.neuhis.pojo.User" >
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                ID,
+            </if>
+            <if test="username != null" >
+                UserName,
+            </if>
+            <if test="password != null" >
+                Password,
+            </if>
+            <if test="realname != null" >
+                RealName,
+            </if>
+            <if test="usetype != null" >
+                UseType,
+            </if>
+            <if test="doctitleid != null" >
+                DocTitleID,
+            </if>
+            <if test="isscheduling != null" >
+                IsScheduling,
+            </if>
+            <if test="deptid != null" >
+                DeptID,
+            </if>
+            <if test="registleid != null" >
+                RegistLeID,
+            </if>
+            <if test="delmark != null" >
+                DelMark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="username != null" >
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null" >
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="realname != null" >
+                #{realname,jdbcType=VARCHAR},
+            </if>
+            <if test="usetype != null" >
+                #{usetype,jdbcType=INTEGER},
+            </if>
+            <if test="doctitleid != null" >
+                #{doctitleid,jdbcType=INTEGER},
+            </if>
+            <if test="isscheduling != null" >
+                #{isscheduling,jdbcType=CHAR},
+            </if>
+            <if test="deptid != null" >
+                #{deptid,jdbcType=INTEGER},
+            </if>
+            <if test="registleid != null" >
+                #{registleid,jdbcType=INTEGER},
+            </if>
+            <if test="delmark != null" >
+                #{delmark,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.neusoft.neuhis.pojo.User" >
+        update user
+        <set >
+            <if test="username != null" >
+                UserName = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null" >
+                Password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="realname != null" >
+                RealName = #{realname,jdbcType=VARCHAR},
+            </if>
+            <if test="usetype != null" >
+                UseType = #{usetype,jdbcType=INTEGER},
+            </if>
+            <if test="doctitleid != null" >
+                DocTitleID = #{doctitleid,jdbcType=INTEGER},
+            </if>
+            <if test="isscheduling != null" >
+                IsScheduling = #{isscheduling,jdbcType=CHAR},
+            </if>
+            <if test="deptid != null" >
+                DeptID = #{deptid,jdbcType=INTEGER},
+            </if>
+            <if test="registleid != null" >
+                RegistLeID = #{registleid,jdbcType=INTEGER},
+            </if>
+            <if test="delmark != null" >
+                DelMark = #{delmark,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.neusoft.neuhis.pojo.User" >
+    update user
+    set UserName = #{username,jdbcType=VARCHAR},
+      Password = #{password,jdbcType=VARCHAR},
+      RealName = #{realname,jdbcType=VARCHAR},
+      UseType = #{usetype,jdbcType=INTEGER},
+      DocTitleID = #{doctitleid,jdbcType=INTEGER},
+      IsScheduling = #{isscheduling,jdbcType=CHAR},
+      DeptID = #{deptid,jdbcType=INTEGER},
+      RegistLeID = #{registleid,jdbcType=INTEGER},
+      DelMark = #{delmark,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
